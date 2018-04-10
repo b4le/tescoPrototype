@@ -1,0 +1,33 @@
+{
+  "name": "tescoPrototype",
+  "version": "1.0.0",
+  "description": "Prototype Product to show Tesco",
+  "main": "index.js",
+  "repository": "https://github.com/b4le/tescoPrototype",
+  "author": "Ben Purslow",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon src/server/index.js --exec babel-node"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.0.0-beta.44",
+    "@babel/core": "^7.0.0-beta.44",
+    "@babel/node": "^7.0.0-beta.44",
+    "@babel/preset-env": "^7.0.0-beta.44",
+    "@babel/preset-react": "^7.0.0-beta.44",
+    "babel-eslint": "^8.2.2",
+    "babel-loader": "^8.0.0-beta",
+    "babel-preset-airbnb": "^2.4.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
+    "express": "^4.16.3",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
+    "webpack": "^4.5.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^2.0.14"
+  }
+}
