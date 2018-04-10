@@ -7,7 +7,7 @@
   "author": "Ben Purslow",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon src/server/index.js --exec babel-node"
+    "start": "nodemon src/index.js --exec babel-node"
   },
   "dependencies": {
     "@babel/cli": "^7.0.0-beta.44",
@@ -25,6 +25,9 @@
     "express": "^4.16.3",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
+    "react-router": "^4.2.0",
+    "react-router-config": "^1.0.0-beta.4",
+    "react-router-dom": "^4.2.2",
     "webpack": "^4.5.0"
   },
   "devDependencies": {

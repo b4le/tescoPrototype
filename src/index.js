@@ -1,21 +1,37 @@
 import express from 'express';
+
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import App from '../client/app';
+
+import StaticRouter from 'react-router-dom/StaticRouter';
+import { renderRoutes } from 'react-router-config';
+
+import routes from './routes';
 
 const port = 3000;
 const app = express();
+const router = express.Router();
 
 /**
  * Render React app on index
  */
-app.get('/', (req, res) => {
-    const body = renderToString(<App/>);
+router.get('*', (req, res) => {
+    let context = {};
+
+    const body = renderToString(
+        <StaticRouter location={req.url} context={context}>
+            {renderRoutes(routes)}
+        </StaticRouter>
+    );
     const title = "Tesco Prototype - SSR";
 
-    res.send(
-        html({ body, title })
-    )
+    if (context.url) {
+        redirect(301, context.url)
+    } else {
+        res.send(
+            html({ body, title })
+        )
+    }
 });
 
 /**
@@ -34,10 +50,10 @@ const html = ({ body, title}) => {
     <body>
         <h1>${title}</h1>
         <section id="root">${body}</section>
-        
     </body>
     </html>
     `
 }
+app.use('/', router);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
