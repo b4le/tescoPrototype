@@ -41,9 +41,9 @@ export default class Home extends Component {
         return this.state.lists.map(listItem => {
             const url = `/list/${listItem.id}`;
             return (
-                <ListItem key={listItem.id}>
-                    <Link to={url}>{listItem.title}</Link>
-                </ListItem>
+                <Link to={url} key={listItem.id}>
+                    <ListItem>{listItem.title}</ListItem>
+                </Link>
             );
         })
     }
