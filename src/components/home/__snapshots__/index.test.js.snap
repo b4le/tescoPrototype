@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home Page Component renders correctly 1`] = `
+<ul
+  className="sc-bwzfXH gpaKPE"
+>
+  <a
+    href="/list/1"
+    onClick={[Function]}
+  >
+    <li
+      className="sc-bdVaJa fNjGPY"
+    >
+      First List
+    </li>
+  </a>
+  <a
+    href="/list/2"
+    onClick={[Function]}
+  >
+    <li
+      className="sc-bdVaJa fNjGPY"
+    >
+      Second List
+    </li>
+  </a>
+  <a
+    href="/list/3"
+    onClick={[Function]}
+  >
+    <li
+      className="sc-bdVaJa fNjGPY"
+    >
+      Third List
+    </li>
+  </a>
+</ul>
+`;

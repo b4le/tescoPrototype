@@ -56,7 +56,6 @@ const html = ({ body, styles, title}) => {
         ${styles}
     </head>
     <body>
-        <h1>${title}</h1>
         <section id="root">${body}</section>
         <script src="/build/bundle.js"></script>
     </body>

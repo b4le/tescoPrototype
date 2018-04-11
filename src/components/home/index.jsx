@@ -13,6 +13,7 @@ const ListItem = styled.li`
 
 const List = styled.ul`
     list-style: none;
+    padding: 0;
 `;
 
 export default class Home extends Component {
@@ -37,8 +38,8 @@ export default class Home extends Component {
         }
     }
 
-    getLists() {
-        return this.state.lists.map(listItem => {
+    getLists(lists) {
+        return lists.map(listItem => {
             const url = `/list/${listItem.id}`;
             return (
                 <Link to={url} key={listItem.id}>
@@ -49,10 +50,16 @@ export default class Home extends Component {
     }
     
     render() {
-        return (
-            <List>
-                {this.getLists()}
-            </List>
-        )
+        if(this.props.render !== false) {
+            return (
+                <List>
+                    {this.getLists(this.state.lists)}
+                </List>
+            )
+        } else {
+            return (
+                <h1>Not going to render</h1>
+            )
+        }
     }
 }
