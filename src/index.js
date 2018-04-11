@@ -57,11 +57,12 @@ const html = ({ body, styles, title}) => {
     </head>
     <body>
         <section id="root">${body}</section>
-        <script src="/build/bundle.js"></script>
+        <script src="bundle.js"></script>
     </body>
     </html>
     `
 }
+app.use(express.static('build'))
 app.use('/', router);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
