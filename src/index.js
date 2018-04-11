@@ -6,6 +6,8 @@ import { renderToString } from 'react-dom/server';
 import StaticRouter from 'react-router-dom/StaticRouter';
 import { renderRoutes } from 'react-router-config';
 
+import { ServerStyleSheet } from 'styled-components';
+
 import routes from './routes';
 
 const port = 3000;
@@ -18,18 +20,23 @@ const router = express.Router();
 router.get('*', (req, res) => {
     let context = {};
 
+    const sheet = new ServerStyleSheet();
+
     const body = renderToString(
-        <StaticRouter location={req.url} context={context}>
-            {renderRoutes(routes)}
-        </StaticRouter>
+        sheet.collectStyles(
+            <StaticRouter location={req.url} context={context}>
+                {renderRoutes(routes)}
+            </StaticRouter>
+        )
     );
+    const styles = sheet.getStyleTags();
     const title = "Tesco Prototype - SSR";
 
     if (context.url) {
         redirect(301, context.url)
     } else {
         res.send(
-            html({ body, title })
+            html({ body, styles, title })
         )
     }
 });
@@ -38,7 +45,7 @@ router.get('*', (req, res) => {
  * Prepare HTML for injection
  * @param {body, title} param0 
  */
-const html = ({ body, title}) => {
+const html = ({ body, styles, title}) => {
     return `
     <!DOCTYPE html>
     <html>
@@ -46,10 +53,12 @@ const html = ({ body, title}) => {
         <meta charset="utf-8" />
         <title>${title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        ${styles}
     </head>
     <body>
         <h1>${title}</h1>
         <section id="root">${body}</section>
+        <script src="/build/bundle.js"></script>
     </body>
     </html>
     `
