@@ -63,6 +63,7 @@ const html = ({ body, styles, title}) => {
     </html>
     `
 }
+app.use(express.static('public'))
 app.use('/', router);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
