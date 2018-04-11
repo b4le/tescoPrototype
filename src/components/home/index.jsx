@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+
 
 import Link from 'react-router-dom/Link'
 
@@ -16,30 +18,9 @@ const List = styled.ul`
     padding: 0;
 `;
 
-export default class Home extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            lists : [
-                {
-                    "id": "1",
-                    "title": "First List"
-                },
-                {
-                    "id": "2",
-                    "title": "Second List"
-                },
-                {
-                    "id": "3",
-                    "title": "Third List"
-                }
-            ]
-        }
-    }
-
-    getLists(lists) {
-        return lists.map(listItem => {
+class Home extends Component {
+    getLists() {
+        return this.props.lists.map(listItem => {
             const url = `/list/${listItem.id}`;
             return (
                 <Link to={url} key={listItem.id}>
@@ -53,7 +34,7 @@ export default class Home extends Component {
         if(this.props.render !== false) {
             return (
                 <List>
-                    {this.getLists(this.state.lists)}
+                    {this.getLists()}
                 </List>
             )
         } else {
@@ -63,3 +44,10 @@ export default class Home extends Component {
         }
     }
 }
+
+function mapStateToProps({lists}) {
+    return { lists };
+}
+
+export default connect(mapStateToProps)(Home);
+export { Home as TestHome };

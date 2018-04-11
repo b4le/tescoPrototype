@@ -9,10 +9,12 @@
   "jest": {
     "verbose": true,
     "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js",
-    "setupFiles": ["./test_setup.js"]
+    "setupFiles": [
+      "./test_setup.js"
+    ]
   },
   "scripts": {
-    "start": "nodemon src/index.js --exec babel-node",
+    "start": "nodemon src/index.js --exec babel-node --inspect",
     "build": "webpack",
     "test": "jest --coverage"
   },
@@ -40,9 +42,11 @@
     "jest-enzyme": "^6.0.0",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
+    "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-config": "^1.0.0-beta.4",
     "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
     "styled-components": "^3.2.5",
     "webpack": "^4.5.0",
     "webpack-node-externals": "^1.7.2"
