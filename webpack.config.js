@@ -8,8 +8,6 @@ module.exports = {
         path: path.resolve(__dirname, './build'),
         filename: 'bundle.js'
     },
-    target: 'node',
-    externals: [nodeExternals()],
     module: {
         rules: [
             {
