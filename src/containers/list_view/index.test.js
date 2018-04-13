@@ -1,9 +1,9 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { TestHome } from './index.jsx';
+import { TestListView } from './index.jsx';
 import renderer from 'react-test-renderer';
 
-describe('Home Page Component', () => {
+describe('List View Component', () => {
     it('renders correctly', () => {
         const lists = [
             {
@@ -19,7 +19,7 @@ describe('Home Page Component', () => {
                 "title": "Third List"
             }
         ]
-        const home = renderer.create(<MemoryRouter><TestHome render='false' lists={lists}/></MemoryRouter>).toJSON();
-        expect(home).toMatchSnapshot();
+        const listView = renderer.create(<MemoryRouter><TestListView render='false' lists={lists}/></MemoryRouter>).toJSON();
+        expect(listView).toMatchSnapshot();
     });
 });

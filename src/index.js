@@ -1,4 +1,5 @@
 import express from 'express';
+const MongoClient = require('mongodb').MongoClient;
 
 //  React
 import React from 'react';
@@ -14,7 +15,7 @@ import { ServerStyleSheet } from 'styled-components';
 // Redux
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import ListApp from './reducers/index.js';
+import App from './reducers/index.js';
 
 import routes from './routes';
 
@@ -23,55 +24,83 @@ const app = express();
 const router = express.Router();
 
 /**
- * Render React app on index
+ * Setup the database connection from the provided URL
+ * @param {String} url 
  */
-router.get('*', (req, res) => {
-    let context = {};
+const getMongoConnection = (url) => {
+    return MongoClient.connect(url).then((client) => {
+            return client.db('shoppingList');
+        })
+        .catch((err) => {
+            throw err
+        });
+}
 
-    // Init style sheet
-    const sheet = new ServerStyleSheet();
+/**
+ * Use the provided DB to get all the data in the provided collection
+ * @param {Object} db 
+ * @param {String} type 
+ */
+const getCollection = (db, type) => {
+    return db.collection(type).find().toArray().then((err, result) => {
+        if (err) return err;
+        return result;
+    });
+}
 
-    const lists = [
-        {
-            "id": "1",
-            "title": "First List"
-        },
-        {
-            "id": "2",
-            "title": "Second List"
-        },
-        {
-            "id": "3",
-            "title": "Third List"
-        }
-    ]
+/**
+ * Create the server and setup the router including grabbing data
+ * @param {Object} db 
+ */
+const setupServer = (db) => {
+    /**
+     * Render React app on index
+     */
+    router.get('*', (req, res) => {
+        let context = {};
 
-    let preloadedState = { lists };
+        // Init style sheet
+        const sheet = new ServerStyleSheet();
 
-    // Init redux store
-    const store = createStore(ListApp, preloadedState);
+        Promise.all([getCollection(db, 'lists'), getCollection(db, 'internalLists')])
+            .then(([lists, internalLists]) => {
+                let preloadedState = { lists, internalLists };
 
-    const body = renderToString(
-        sheet.collectStyles(
-            <Provider store={store}>
-                <StaticRouter location={req.url} context={context}>
-                    {renderRoutes(routes)}
-                </StaticRouter>
-            </Provider>
-        )
-    );
-    const finalState = store.getState();
-    const styles = sheet.getStyleTags();
-    const title = "Tesco Prototype - SSR";
+                // Init redux store
+                const store = createStore(App, preloadedState);
 
-    if (context.url) {
-        redirect(301, context.url)
-    } else {
-        res.send(
-            html({ body, styles, title, finalState })
-        )
-    }
-});
+                const body = renderToString(
+                    sheet.collectStyles(
+                        <Provider store={store}>
+                            <StaticRouter location={req.url} context={context}>
+                                {renderRoutes(routes)}
+                            </StaticRouter>
+                        </Provider>
+                    )
+                );
+                const finalState = store.getState();
+                const styles = sheet.getStyleTags();
+                const title = "Tesco Prototype - SSR";
+        
+                if (context.url) {
+                    redirect(301, context.url)
+                } else {
+                    res.send(
+                        html({ body, styles, title, finalState })
+                    )
+                }
+            })
+            .catch((err) => {
+                throw err;  
+            });        
+    });
+
+    
+    app.use(express.static('build'))
+    app.use('/', router);
+
+    app.listen(port, () => console.log(`Listening on port ${port}`));
+}
 
 /**
  * Prepare HTML for injection
@@ -92,12 +121,10 @@ const html = ({ body, styles, title, finalState}) => {
         <script>
             window.__PRELOADED_STATE__ = ${JSON.stringify(finalState).replace(/</g, '\\u003c')}
         </script>
-        <script src="bundle.js"></script>
+        <script src="/bundle.js"></script>
     </body>
     </html>
     `
 }
-app.use(express.static('build'))
-app.use('/', router);
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+getMongoConnection('mongodb://localhost:27017').then((db) => setupServer(db));

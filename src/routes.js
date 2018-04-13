@@ -1,6 +1,5 @@
 import AppRoot from './components/app_root.jsx';
-import Home from './components/home/index.jsx';
-import List from './components/list/index.jsx';
+import ListView from './containers/list_view/index.jsx';
 
 const routes = [
   {
@@ -9,15 +8,11 @@ const routes = [
       {
         path: '/',
         exact: true,
-        component: Home,
-      },
-      {
-        path: '/home',
-        component: Home,
+        component: ListView,
       },
       {
         path: '/list/:listId',
-        component: List,
+        component: ListView,
       },
     ],
   },
